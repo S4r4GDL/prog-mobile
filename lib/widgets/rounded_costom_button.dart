@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prog_mobile_app_educadin/pages/login/signin_page.dart';
 
 class RoundedCostomButton extends StatelessWidget {
   const RoundedCostomButton({
@@ -7,7 +6,7 @@ class RoundedCostomButton extends StatelessWidget {
     this.buttonText,
     this.buttonColor,
     this.onTap,
-    this.labelColor
+    this.labelColor,
   });
 
   final String? buttonText;
@@ -25,15 +24,16 @@ class RoundedCostomButton extends StatelessWidget {
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: buttonColor ?? Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(50),
-          ),
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(50)),
         ),
         child: Text(
           buttonText!,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,
-          color: labelColor ?? Colors.black),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: labelColor ?? Colors.black,
+          ),
         ),
       ),
     );
