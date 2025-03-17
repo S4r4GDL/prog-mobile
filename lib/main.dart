@@ -12,9 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'EducaDin',
       theme: ThemeData(primarySwatch: Colors.lightGreen),
-     home: WelcomePage(),
+     home: const WelcomePage(),
     );
   }
 }

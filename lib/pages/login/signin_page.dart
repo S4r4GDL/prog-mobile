@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:prog_mobile_app_educadin/widgets/login_scaffold.dart';
 
-class SigninPage extends StatelessWidget {
+class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<SigninPage> createState() => _SigninPageState();
+}
+
+class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
-    return const Text('Realize o login');
+    return LoginScaffold(child: Text('Entrar'),);
   }
 }
