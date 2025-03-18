@@ -7,7 +7,6 @@ import 'package:prog_mobile_app_educadin/widgets/rounded_costom_button.dart';
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return LoginScaffold(
