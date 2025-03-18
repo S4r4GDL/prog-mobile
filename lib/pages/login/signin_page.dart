@@ -215,15 +215,14 @@ class _SigninPageState extends State<SigninPage> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
-                  // Change button background color here
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
                       16,
-                    ), // Optional: Rounded corners
+                    ),
                   ),
                   padding: const EdgeInsets.symmetric(
                     vertical: 16,
-                  ), // Optional: Adjust padding
+                  ),
                 ),
                 child: const Text(
                   'Entrar',
