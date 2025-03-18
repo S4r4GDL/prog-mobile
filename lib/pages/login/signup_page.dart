@@ -52,7 +52,7 @@ class _SignupPageState extends State<SignupPage> {
                       Text(
                         'Primeiros Passos',
                         style: TextStyle(
-                          fontSize: 26,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: lightColorScheme.primary,
                         ),
