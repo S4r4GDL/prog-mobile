@@ -42,7 +42,7 @@ class _SigninPageState extends State<SigninPage> {
                   Text(
                     'Acesse sua conta',
                     style: TextStyle(
-                      fontSize: 26,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: lightColorScheme.primary,
                     ),
