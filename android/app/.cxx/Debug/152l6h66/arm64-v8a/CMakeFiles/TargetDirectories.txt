@@ -1,0 +1,2 @@
+C:/Users/sarag/StudioProjects/prog_mobile_app_educadin/android/app/.cxx/Debug/152l6h66/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/sarag/StudioProjects/prog_mobile_app_educadin/android/app/.cxx/Debug/152l6h66/arm64-v8a/CMakeFiles/rebuild_cache.dir
