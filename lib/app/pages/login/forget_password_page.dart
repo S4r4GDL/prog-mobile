@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:prog_mobile_app_educadin/pages/login/signup_page.dart';
-import 'package:prog_mobile_app_educadin/widgets/login_scaffold.dart';
-
+import 'package:prog_mobile_app_educadin/main.dart';
+import 'package:routefly/routefly.dart';
 import '../../theme/theme.dart';
+import '../../widgets/login_scaffold.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
   const ForgetPasswordPage({super.key});
@@ -98,11 +98,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_recoveryFormKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Encaminha para a home page'),
-                                ),
-                              );
+                              Routefly.navigate(routePaths.pages.login.signin);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

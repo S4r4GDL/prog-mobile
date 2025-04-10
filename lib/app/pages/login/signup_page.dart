@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prog_mobile_app_educadin/pages/login/signin_page.dart';
-
+import 'package:prog_mobile_app_educadin/app/pages/login/signin_page.dart';
 import '../../theme/theme.dart';
 import '../../widgets/login_scaffold.dart';
 

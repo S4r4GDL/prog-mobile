@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:prog_mobile_app_educadin/pages/login/forget_password_page.dart';
-import 'package:prog_mobile_app_educadin/pages/login/signup_page.dart';
-import 'package:prog_mobile_app_educadin/theme/theme.dart';
-import 'package:prog_mobile_app_educadin/widgets/login_scaffold.dart';
+import 'package:prog_mobile_app_educadin/app/pages/login/signup_page.dart';
+import 'package:routefly/routefly.dart';
+import '../../../main.dart';
+import '../../theme/theme.dart';
+import '../../widgets/login_scaffold.dart';
+import '../core/home/home_page.dart';
+import 'forget_password_page.dart';
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -192,19 +195,9 @@ class _SigninPageState extends State<SigninPage> {
                 onPressed: () {
                   if (_loginFormKey.currentState!.validate()) {
                     if (rememberMe) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Encaminha para a home page com lembre-se',
-                          ),
-                        ),
-                      );
+                      Routefly.navigate(routePaths.pages.core.home, arguments: rememberMe);
                     }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Encaminha para a home page'),
-                      ),
-                    );
+                    Routefly.navigate(routePaths.pages.core.home);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

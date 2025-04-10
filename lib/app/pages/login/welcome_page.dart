@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:prog_mobile_app_educadin/pages/login/signin_page.dart';
-import 'package:prog_mobile_app_educadin/pages/login/signup_page.dart';
-import 'package:prog_mobile_app_educadin/widgets/login_scaffold.dart';
-import 'package:prog_mobile_app_educadin/widgets/rounded_costom_button.dart';
+import 'package:prog_mobile_app_educadin/app/pages/login/signin_page.dart';
+import 'package:prog_mobile_app_educadin/app/pages/login/signup_page.dart';
+
+import '../../widgets/login_scaffold.dart';
+import '../../widgets/rounded_costom_button.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
