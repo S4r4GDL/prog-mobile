@@ -1,6 +1,6 @@
 # prog_mobile_app_educadin
 
-A new Flutter project.
+A new Flutter project prog_mobile_app_educadin.
 
 ## Getting Started
 
