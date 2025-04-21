@@ -295,7 +295,7 @@ class _IncomesPageState extends State<IncomesPage> {
                   child: TextField(
                     controller: amountController,
                     decoration: const InputDecoration(
-                      labelText: 'Valor',
+                      labelText: 'Valor (R\$)',
                       hintText: '0,00',
                     ),
                     keyboardType: TextInputType.number,
@@ -339,7 +339,7 @@ class _IncomesPageState extends State<IncomesPage> {
         ),
         ElevatedButton(
           onPressed: () {
-            // Aqui seria implementada a lógica para salvar a receita
+            // Aqui implementar a lógica para salvar a receita
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(
@@ -367,7 +367,7 @@ class _IncomesPageState extends State<IncomesPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Aqui seria implementada a lógica para excluir a receita
+                // Aqui implementar a lógica para excluir a receita
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
