@@ -89,7 +89,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: () {
-                    //_showAddExpenseDialog(context);
+                    _showAddExpenseDialog(context);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: lightColorScheme.primary,
@@ -198,7 +198,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                               constraints: const BoxConstraints(),
                               padding: EdgeInsets.zero,
                               onPressed: () {
-                                //_showEditExpenseDialog(context, expense);
+                                _showEditExpenseDialog(context, expense);
                               },
                             ),
                             const SizedBox(width: 8),
@@ -211,7 +211,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                               constraints: const BoxConstraints(),
                               padding: EdgeInsets.zero,
                               onPressed: () {
-                                //_showDeleteConfirmationDialog(context, expense);
+                                _showDeleteConfirmationDialog(context, expense);
                               },
                             ),
                           ],
@@ -228,5 +228,164 @@ class _ExpensesPageState extends State<ExpensesPage> {
     );
   }
 
+  void _showAddExpenseDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return _buildExpenseDialog(context, null);
+      },
+    );
+  }
 
+  void _showEditExpenseDialog(BuildContext context, Map<String, dynamic> expense) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return _buildExpenseDialog(context, expense);
+      },
+    );
+  }
+
+  Widget _buildExpenseDialog(BuildContext context, Map<String, dynamic>? expense) {
+    final isEditing = expense != null;
+    final nameController = TextEditingController(text: isEditing ? expense['name'] : '');
+    final descriptionController = TextEditingController(text: isEditing ? expense['description'] : '');
+    final amountController = TextEditingController(text: isEditing ? expense['amount'].toString().replaceAll('R\$ ', '') : '');
+
+    String selectedCategory = isEditing ? expense['category'] : 'Moradia';
+    DateTime selectedDate = isEditing ? expense['expenseDate'] : DateTime.now();
+
+    return AlertDialog(
+      title: Text(isEditing ? 'Editar Despesa' : 'Adicionar Despesa'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Nome',
+                hintText: 'Nome da despesa',
+              ),
+            ),
+            const SizedBox(height: 16),
+            DropdownButtonFormField<String>(
+              value: selectedCategory,
+              decoration: const InputDecoration(
+                labelText: 'Categoria',
+              ),
+              items: ['Moradia', 'Alimentação', 'Transporte', 'Saúde', 'Educação', 'Lazer', 'Serviços', 'Outros']
+                  .map((category) => DropdownMenuItem(
+                value: category,
+                child: Text(category),
+              ))
+                  .toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  selectedCategory = value;
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: descriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Descrição',
+                hintText: 'Descrição da despesa',
+              ),
+              maxLines: 2,
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: amountController,
+                    decoration: const InputDecoration(
+                      labelText: 'Valor (R\$)',
+                      hintText: '0,00',
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: InkWell(
+                    onTap: () async {
+                      final DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDate,
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime(2025),
+                      );
+                      if (picked != null && picked != selectedDate) {
+                        selectedDate = picked;
+                      }
+                    },
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        labelText: 'Data',
+                      ),
+                      child: Text(
+                        '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancelar'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            // Aqui implementar a lógica para salvar a despesa
+            Navigator.of(context).pop();
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: lightColorScheme.primary,
+          ),
+          child: Text(isEditing ? 'Salvar' : 'Adicionar'),
+        ),
+      ],
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context, Map<String, dynamic> expense) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar exclusão'),
+          content: Text('Deseja realmente excluir a despesa "${expense['name']}"?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Aqui implementar a lógica para excluir a despesa
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+              ),
+              child: const Text('Excluir'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
