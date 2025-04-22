@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:routefly/routefly.dart';
 
 import 'app/pages/core/home/home_page.dart' as a0;
-import 'app/pages/core/management/income/income_page.dart' as a1;
+import 'app/pages/core/management/income/[id]_income_page.dart' as a1;
 import 'app/pages/login/forget_password_page.dart' as a2;
 import 'app/pages/login/signin_page.dart' as a3;
 import 'app/pages/login/signup_page.dart' as a4;
