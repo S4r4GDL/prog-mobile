@@ -2,6 +2,7 @@ import 'package:educadinapi/api.dart';
 import 'package:flutter/material.dart';
 import '../../../../widgets/manage_default.dart';
 import '../../../../theme/theme.dart';
+import '../../../login/user_session.dart';
 
 class IncomesPage extends StatefulWidget {
   const IncomesPage({super.key});
@@ -55,7 +56,7 @@ class _IncomesPageState extends State<IncomesPage> {
       final result = await _api.incomeControllerListAll();
       setState(() {
         print(result);
-        _incomes = result ?? [];
+        _incomes = result?.where((income) => income.userId == userSession.userId).toList() ?? [];
         _isLoading = false;
       });
     } catch (e) {
@@ -475,7 +476,7 @@ class _IncomesPageState extends State<IncomesPage> {
               categoryName: selectedCategory,
               incomeDate: selectedDate,
               leadTime: 1,
-              userId: 1,
+              userId: userSession.userId!,
               repeatable: IncomeDTOCreateUpdateRepeatableEnum.DONT_REPEATS,
             );
               _addIncome(incomeDTO);

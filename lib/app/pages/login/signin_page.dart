@@ -1,5 +1,6 @@
 import 'package:educadinapi/api.dart';
 import 'package:flutter/material.dart';
+import 'package:prog_mobile_app_educadin/app/pages/login/user_session.dart';
 import 'package:routefly/routefly.dart';
 import '../../../main.dart';
 import '../../theme/theme.dart';
@@ -40,18 +41,14 @@ class _SigninPageState extends State<SigninPage> {
       final credencial = await _authApi.login(authDTO);
 
       if (credencial != null) {
+        userSession.userId = credencial.id;
+        userSession.token = credencial.accessToken;
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login realizado com sucesso!')),
         );
 
-        Routefly.navigate(
-          routePaths.pages.core.home,
-          arguments: {
-            'userId': credencial.id, // <-- Certifique que existe id no CredencialDTO
-            'accessToken': credencial.accessToken, // <-- E accessToken
-            'rememberMe': _rememberMe,
-          },
-        );
+        Routefly.navigate(routePaths.pages.core.home);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Email ou senha incorretos!')),

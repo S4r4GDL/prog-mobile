@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:educadinapi/api.dart';
+
+import '../../../login/user_session.dart';
 class IncomePage extends StatefulWidget {
   const IncomePage({super.key});
 
@@ -23,7 +25,7 @@ class _IncomePageState extends State<IncomePage> {
       final result = await _api.incomeControllerListAll();
       setState(() {
         print(result);
-        _incomes = result ?? [];
+        _incomes = result?.where((income) => income.userId == userSession.userId).toList() ?? [];
         _isLoading = false;
       });
     } catch (e) {
@@ -40,7 +42,7 @@ class _IncomePageState extends State<IncomePage> {
       leadTime: 3,
       incomeDate: DateTime.now(),
       name: 'aetuh',
-      userId: 1,
+      userId: userSession.userId,
       repeatable: IncomeDTOCreateUpdateRepeatableEnum.MONTHLY
     );
     try {
