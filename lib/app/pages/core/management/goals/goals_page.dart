@@ -52,7 +52,7 @@ class _GoalsPageState extends State<GoalsPage> {
   @override
   Widget build(BuildContext context) {
     return ManageDefaultScaffold(
-      title: const Text('Minhas Metas', style: TextStyle(color: Colors.white)),
+      title: 'Minhas Metas',
       child: Column(
         children: [
           Padding(

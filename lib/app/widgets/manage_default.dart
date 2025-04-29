@@ -3,10 +3,20 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 
 class ManageDefaultScaffold extends StatelessWidget {
-  const ManageDefaultScaffold({super.key, this.child, required Text this.title});
-  final Widget? child;
+  const ManageDefaultScaffold({
+    super.key,
+    required this.child,
+    required this.title,
+    this.onLogout,
+    this.onUserPressed,
+    this.drawer,
+  });
 
-  final Text title;
+  final Widget? child;
+  final String title;
+  final VoidCallback? onLogout;
+  final VoidCallback? onUserPressed;
+  final Widget? drawer;
 
   @override
   Widget build(BuildContext context) {
@@ -15,20 +25,36 @@ class ManageDefaultScaffold extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: lightColorScheme.primary,
         elevation: 0,
-        title: title,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Column(
-              children: [
-                Expanded(child: child!),
-              ],
-            ),
+        title: Text(title, style: const TextStyle(color: Colors.white)),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: onUserPressed,
+          ),
+          IconButton(
+            icon: const Icon(Icons.notification_add),
+            onPressed: onLogout,
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: onLogout,
           ),
         ],
       ),
+      // extendBodyBehindAppBar: true,
+      // body: Stack(
+      //   children: [
+      //     SafeArea(
+      //       child: Column(
+      //         children: [
+      //           Expanded(child: child!),
+      //         ],
+      //       ),
+      //     ),
+      //   ],
+      // ),
+      drawer: drawer,
+      body: SafeArea(child: child!),
     );
   }
 }

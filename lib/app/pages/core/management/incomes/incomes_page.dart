@@ -132,10 +132,7 @@ class _IncomesPageState extends State<IncomesPage> {
   @override
   Widget build(BuildContext context) {
     return ManageDefaultScaffold(
-      title: const Text(
-        'Minhas Rendas',
-        style: TextStyle(color: Colors.white),
-      ),
+      title: 'Meus Ganhos',
       child: Column(
         children: [
           Padding(

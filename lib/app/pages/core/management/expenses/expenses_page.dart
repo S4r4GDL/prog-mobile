@@ -56,7 +56,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
   @override
   Widget build(BuildContext context) {
     return ManageDefaultScaffold(
-      title: const Text('Meus Gastos', style: TextStyle(color: Colors.white)),
+      title: 'Meus Gastos',
       child: Column(
         children: [
           Padding(

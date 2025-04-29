@@ -29,7 +29,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
   @override
   Widget build(BuildContext context) {
     return ManageDefaultScaffold(
-      title: const Text('Preferências', style: TextStyle(color: Colors.white)),
+      title: 'Minhas Preferências',
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
