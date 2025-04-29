@@ -1,3 +1,4 @@
+import 'package:educadinapi/api.dart';
 import 'package:flutter/material.dart';
 import 'package:prog_mobile_app_educadin/app/pages/login/signin_page.dart';
 import '../../theme/theme.dart';
@@ -15,14 +16,55 @@ class _SignupPageState extends State<SignupPage> {
   bool rememberMe = true;
   bool _obscurePassword = true;
 
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+
+  final UserControllerApi _userApi = UserControllerApi();
 
   @override
   void dispose() {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _signup() async {
+    if (_signupFormKey.currentState!.validate()) {
+      try {
+        final userCreateDTO = UserCreateDTO(
+          login: _emailController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+
+        final response = await _userApi.create(userCreateDTO);
+
+        if (response != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Cadastro realizado com sucesso!')),
+          );
+
+          // Redirecionar para login
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const SigninPage()),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Não foi possível realizar o cadastro.')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao cadastrar: $e')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Dados inválidos!')),
+      );
+    }
   }
 
   @override
@@ -58,6 +100,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       const SizedBox(height: 32),
                       TextFormField(
+                        controller: _emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Entre com o email';
@@ -187,19 +230,7 @@ class _SignupPageState extends State<SignupPage> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_signupFormKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Cadastro realizado com sucesso!'),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Dados inválidos!')),
-                              );
-                            }
-                          },
+                          onPressed: _signup,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                             shape: RoundedRectangleBorder(
