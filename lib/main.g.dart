@@ -8,11 +8,11 @@ List<RouteEntity> get routes => [
     uri: Uri.parse('pages/core/home'),
     routeBuilder: b0Builder,
   ),
-  RouteEntity(
-    key: 'pages/core/management/income',
-    uri: Uri.parse('pages/core/management/income'),
-    routeBuilder: b1Builder,
-  ),
+  // RouteEntity(
+  //   key: 'pages/core/management/income',
+  //   uri: Uri.parse('pages/core/management/income'),
+  //   routeBuilder: b1Builder,
+  // ),
   RouteEntity(
     key: 'pages/login/forget_password',
     uri: Uri.parse('pages/login/forget_password'),

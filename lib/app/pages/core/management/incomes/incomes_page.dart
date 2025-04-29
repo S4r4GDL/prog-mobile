@@ -289,7 +289,7 @@ class _IncomesPageState extends State<IncomesPage> {
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
                                       onPressed: () {
-                                        // _showEditIncomeDialog(context, income);
+                                        _showEditIncomeDialog(context, income);
                                       },
                                     ),
                                     const SizedBox(width: 8),
@@ -302,7 +302,7 @@ class _IncomesPageState extends State<IncomesPage> {
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
                                       onPressed: () {
-                                        // _showDeleteConfirmationDialog(context, income);
+                                        _showDeleteConfirmationDialog(context, income);
                                       },
                                     ),
                                   ],
@@ -329,14 +329,19 @@ class _IncomesPageState extends State<IncomesPage> {
   }
 
   void _showEditIncomeDialog(
-    BuildContext context,
-    Map<String, dynamic> income,
+    BuildContext context, IncomeListDTO income,
   ) {
+    final incomeMap = {
+      'id': income.id,
+      'name': income.name,
+      'description': income.description,
+      'amount': income.amount,
+      'category': income.category?.name ?? '',
+      'incomeDate': income.incomeDate,
+    };
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return _buildIncomeDialog(context, income);
-      },
+      builder: (_) => _buildIncomeDialog(context, incomeMap),
     );
   }
 
@@ -465,7 +470,11 @@ class _IncomesPageState extends State<IncomesPage> {
               userId: userSession.userId!,
               repeatable: IncomeDTOCreateUpdateRepeatableEnum.DONT_REPEATS,
             );
-              _addIncome(incomeDTO);
+            if (isEditing) {
+              _editIncome(income!['id'], incomeDTO); // edita usando id
+            } else {
+              _addIncome(incomeDTO); // criação normal
+            }
 
             Navigator.of(context).pop();
           },
@@ -478,10 +487,12 @@ class _IncomesPageState extends State<IncomesPage> {
     );
   }
 
+
+
   void _showDeleteConfirmationDialog(
-    BuildContext context,
-    IncomeDTO income,
-  ) {
+      BuildContext context,
+      IncomeListDTO income,
+      ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -499,7 +510,7 @@ class _IncomesPageState extends State<IncomesPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                // _api.incomeControllerRemove(id)
+                _deleteIncome(income.id!);
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
@@ -512,4 +523,5 @@ class _IncomesPageState extends State<IncomesPage> {
       },
     );
   }
+
 }
