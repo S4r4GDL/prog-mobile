@@ -66,17 +66,6 @@ class _IncomesPageState extends State<IncomesPage> {
   }
 
   Future<void> _addIncome(newIncome) async {
-    //Exemplo
-    // final newIncome = IncomeDTOCreateUpdate(
-    //   description: 'Novo dfferf mobile 3',
-    //   amount: 100,
-    //   categoryName: 'ewtg43e4r4t dfthy',
-    //   leadTime: 3,
-    //   incomeDate: DateTime.now(),
-    //   name: 'aetuh',
-    //   userId: 1,
-    //   repeatable: IncomeDTOCreateUpdateRepeatableEnum.MONTHLY,
-    // );
     try {
       await _api.incomeControllerCreate(newIncome);
       _loadIncomes();

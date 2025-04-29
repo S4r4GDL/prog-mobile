@@ -114,9 +114,9 @@ class _SigninPageState extends State<SigninPage> {
                           if (value == null || value.isEmpty) {
                             return 'Insira a senha';
                           }
-                          if (!RegExp(r'.*[@$#%&.*].*').hasMatch(value)) {
-                            return 'Deve conter caracteres especiais (@, #, \$, etc.)';
-                          }
+                          // if (!RegExp(r'.*[@$#%&.*].*').hasMatch(value)) {
+                          //   return 'Deve conter caracteres especiais (@, #, \$, etc.)';
+                          // }
                           return null;
                         },
                         decoration: _inputDecoration('Senha').copyWith(

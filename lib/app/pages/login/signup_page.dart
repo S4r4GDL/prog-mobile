@@ -45,7 +45,7 @@ class _SignupPageState extends State<SignupPage> {
             const SnackBar(content: Text('Cadastro realizado com sucesso!')),
           );
 
-          // Redirecionar para login
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const SigninPage()),
