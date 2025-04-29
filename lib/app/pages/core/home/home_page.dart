@@ -62,6 +62,11 @@ class _HomePageState extends State<HomePage> {
               title: const Text('Preferências'),
               onTap: () => _navigateTo(const PreferencesPage()),
             ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Sair'),
+            ),
+
 
           ],
         ),
