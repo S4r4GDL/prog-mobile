@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prog_mobile_app_educadin/app/pages/core/home/dashboard_page.dart';
 import 'package:prog_mobile_app_educadin/app/pages/core/management/preferences/preferences_page.dart';
 
 import '../../../widgets/manage_default.dart';
@@ -65,9 +66,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      child: const Center(
-        child: Text('Bem-vindo ao App EducaDin!'),
-      ),
+      child: const DashboardPage(),
     );
   }
 }
