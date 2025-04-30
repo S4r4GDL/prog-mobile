@@ -237,7 +237,9 @@ class _IncomesPageState extends State<IncomesPage> {
                         ),
                       ],
                     ),
-                    trailing: Column(
+                    trailing: Container(
+                      width: 80,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -245,11 +247,11 @@ class _IncomesPageState extends State<IncomesPage> {
                           income.amount.toString(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: 12,
                             color: lightColorScheme.primary,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -257,7 +259,7 @@ class _IncomesPageState extends State<IncomesPage> {
                               icon: Icon(
                                 Icons.edit,
                                 color: lightColorScheme.primary,
-                                size: 24,
+                                size: 20,
                               ),
                               constraints: const BoxConstraints(),
                               padding: EdgeInsets.zero,
@@ -265,12 +267,12 @@ class _IncomesPageState extends State<IncomesPage> {
                                 _showEditIncomeDialog(context, income);
                               },
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 4),
                             IconButton(
                               icon: const Icon(
                                 Icons.delete,
                                 color: Colors.redAccent,
-                                size: 24,
+                                size: 20,
                               ),
                               constraints: const BoxConstraints(),
                               padding: EdgeInsets.zero,
@@ -281,6 +283,7 @@ class _IncomesPageState extends State<IncomesPage> {
                           ],
                         ),
                       ],
+                      ),
                     ),
                   ),
                 );

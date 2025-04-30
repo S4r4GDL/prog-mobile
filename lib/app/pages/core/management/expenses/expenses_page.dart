@@ -174,7 +174,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                       ],
                     ),
                     trailing: Container(
-                      width: 80, // control horizontal space to prevent overflow
+                      width: 80,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.end,
