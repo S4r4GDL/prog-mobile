@@ -1,4 +1,6 @@
+import 'package:educadinapi/api.dart';
 import 'package:flutter/material.dart';
+import 'package:prog_mobile_app_educadin/app/pages/login/signin_page.dart';
 import 'package:prog_mobile_app_educadin/main.dart';
 import 'package:routefly/routefly.dart';
 import '../../theme/theme.dart';
@@ -13,6 +15,52 @@ class ForgetPasswordPage extends StatefulWidget {
 
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   final _recoveryFormKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _sendRecoveryEmail() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('O campo de email está vazio')),
+      );
+      return;
+    }
+
+    print(' Recuperação de senha para: $email');
+
+    setState(() => _isLoading = true);
+    try {
+      final api = AuthAPIApi();
+      final response = await api.recoverPasswordWithHttpInfo(email);
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email de recuperação enviado!')),
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const SigninPage()),
+        );
+
+      } else {
+        print('⚠ Falha HTTP: ${response.statusCode}, corpo: ${response.body}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Não foi possível enviar o email.')),
+        );
+      }
+    } catch (e) {
+      print(' Erro ao enviar email de recuperação: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro: ${e.toString()}')),
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +104,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ),
                       const SizedBox(height: 32),
                       TextFormField(
+                        controller: _emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Entre com o email';
@@ -81,29 +130,24 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.green,
-                              width: 2.0,
-                            ),
+                            borderSide: const BorderSide(color: Colors.green, width: 2.0),
                             borderRadius: BorderRadius.circular(16.0),
                           ),
-                          floatingLabelStyle: const TextStyle(
-                            color: Colors.green,
-                          ),
+                          floatingLabelStyle: const TextStyle(color: Colors.green),
                         ),
                       ),
                       const SizedBox(height: 32),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: _isLoading
+                              ? null
+                              : () {
                             if (_recoveryFormKey.currentState!.validate()) {
-                              Routefly.navigate(routePaths.pages.login.signin);
+                              _sendRecoveryEmail();
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Dados inválidos!'),
-                                ),
+                                const SnackBar(content: Text('Dados inválidos!')),
                               );
                             }
                           },
