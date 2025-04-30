@@ -12,51 +12,23 @@ class IncomesPage extends StatefulWidget {
 }
 
 class _IncomesPageState extends State<IncomesPage> {
-  // final List<Map<String, dynamic>> _incomes = [
-  //   {
-  //     'id': 1,
-  //     'name': 'Salário',
-  //     'category': 'Trabalho',
-  //     'description': 'Salário mensal',
-  //     'incomeDate': DateTime.now().subtract(const Duration(days: 5)),
-  //     'amount': 'R\$ 3.500,00',
-  //   },
-  //   {
-  //     'id': 2,
-  //     'name': 'Freelance',
-  //     'category': 'Trabalho',
-  //     'description': 'Projeto de design',
-  //     'incomeDate': DateTime.now().subtract(const Duration(days: 10)),
-  //     'amount': 'R\$ 800,00',
-  //   },
-  //   {
-  //     'id': 3,
-  //     'name': 'Dividendos',
-  //     'category': 'Investimentos',
-  //     'description': 'Rendimentos de ações',
-  //     'incomeDate': DateTime.now().subtract(const Duration(days: 15)),
-  //     'amount': 'R\$ 250,00',
-  //   },
-  //   {
-  //     'id': 4,
-  //     'name': 'Aluguel',
-  //     'category': 'Imóveis',
-  //     'description': 'Aluguel do apartamento',
-  //     'incomeDate': DateTime.now().subtract(const Duration(days: 2)),
-  //     'amount': 'R\$ 1.200,00',
-  //   },
-  // ];
 
   final IncomeControllerApi _api = IncomeControllerApi();
   List<IncomeListDTO> _incomes = [];
   bool _isLoading = true;
 
   Future<void> _loadIncomes() async {
+    final userId = userSession.userId;
+    if (userId == null) return;
+
     try {
-      final result = await _api.incomeControllerListAll();
+      final result = await _api.incomeControllerGetByUserId(userId);
       setState(() {
         print(result);
-        _incomes = result?.where((income) => income.userId == userSession.userId).toList() ?? [];
+        _incomes = result
+            ?.where((income) => income.userId == userId)
+            .toList() ??
+            [];
         _isLoading = false;
       });
     } catch (e) {
@@ -64,6 +36,7 @@ class _IncomesPageState extends State<IncomesPage> {
       setState(() => _isLoading = false);
     }
   }
+
 
   Future<void> _addIncome(newIncome) async {
     try {
@@ -139,8 +112,8 @@ class _IncomesPageState extends State<IncomesPage> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                Expanded(
-                  child: TextField(
+                Flexible(
+                child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Pesquisar receitas',
                       prefixIcon: const Icon(Icons.search),
@@ -254,7 +227,7 @@ class _IncomesPageState extends State<IncomesPage> {
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      '${income.incomeDate}',
+                                      '${income.incomeDate!.day}/${income.incomeDate!.month}/${income.incomeDate!.year}',
                                       style: TextStyle(
                                         color: Colors.grey.shade600,
                                         fontSize: 12,
@@ -284,7 +257,7 @@ class _IncomesPageState extends State<IncomesPage> {
                                       icon: Icon(
                                         Icons.edit,
                                         color: lightColorScheme.primary,
-                                        size: 20,
+                                        size: 24,
                                       ),
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
@@ -297,7 +270,7 @@ class _IncomesPageState extends State<IncomesPage> {
                                       icon: const Icon(
                                         Icons.delete,
                                         color: Colors.redAccent,
-                                        size: 20,
+                                        size: 24,
                                       ),
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
