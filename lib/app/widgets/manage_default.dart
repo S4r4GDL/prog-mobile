@@ -8,6 +8,7 @@ class ManageDefaultScaffold extends StatelessWidget {
     required this.child,
     required this.title,
     this.onLogout,
+    this.onNottfication,
     this.onUserPressed,
     this.drawer,
   });
@@ -17,6 +18,7 @@ class ManageDefaultScaffold extends StatelessWidget {
   final VoidCallback? onLogout;
   final VoidCallback? onUserPressed;
   final Widget? drawer;
+  final VoidCallback? onNottfication;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class ManageDefaultScaffold extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.notification_add),
-            onPressed: onLogout,
+            onPressed: onNottfication,
           ),
           IconButton(
             icon: const Icon(Icons.logout),

@@ -84,11 +84,11 @@ class _IncomesPageState extends State<IncomesPage> {
           context: context,
           builder:
               (_) => AlertDialog(
-                title: Text("Detalhes do Rendimento"),
-                content: Text(
-                  'Descrição: ${income.description}\nValor: ${income.amount}\nRepetível: ${income.repeatable}',
-                ),
-              ),
+            title: Text("Detalhes do Rendimento"),
+            content: Text(
+              'Descrição: ${income.description}\nValor: ${income.amount}\nRepetível: ${income.repeatable}',
+            ),
+          ),
         );
       }
     } catch (e) {
@@ -113,7 +113,7 @@ class _IncomesPageState extends State<IncomesPage> {
             child: Row(
               children: [
                 Flexible(
-                child: TextField(
+                  child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Pesquisar receitas',
                       prefixIcon: const Icon(Icons.search),
@@ -168,124 +168,127 @@ class _IncomesPageState extends State<IncomesPage> {
           ),
           Expanded(
             child:
-                _isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: _incomes.length,
-                      itemBuilder: (context, index) {
-                        final income = _incomes[index];
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: _incomes.length,
+              itemBuilder: (context, index) {
+                final income = _incomes[index];
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    title: Text(
+                      income.name.toString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
+                        Text(
+                          income.description.toString(),
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontSize: 14,
                           ),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            title: Text(
-                              income.name.toString(),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: lightColorScheme.surface,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                income.category!.name.toString(),
+                                style: TextStyle(
+                                  color: lightColorScheme.primary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 4),
-                                Text(
-                                  income.description.toString(),
-                                  style: TextStyle(
-                                    color: Colors.grey.shade700,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: lightColorScheme.surface,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        income.category!.name.toString(),
-                                        style: TextStyle(
-                                          color: lightColorScheme.primary,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      '${income.incomeDate!.day}/${income.incomeDate!.month}/${income.incomeDate!.year}',
-                                      style: TextStyle(
-                                        color: Colors.grey.shade600,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            const SizedBox(width: 8),
+                            Text(
+                              '${income.incomeDate!.day}/${income.incomeDate!.month}/${income.incomeDate!.year}',
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 12,
+                              ),
                             ),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  income.amount.toString(),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: lightColorScheme.primary,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.edit,
-                                        color: lightColorScheme.primary,
-                                        size: 24,
-                                      ),
-                                      constraints: const BoxConstraints(),
-                                      padding: EdgeInsets.zero,
-                                      onPressed: () {
-                                        _showEditIncomeDialog(context, income);
-                                      },
-                                    ),
-                                    const SizedBox(width: 8),
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        color: Colors.redAccent,
-                                        size: 24,
-                                      ),
-                                      constraints: const BoxConstraints(),
-                                      padding: EdgeInsets.zero,
-                                      onPressed: () {
-                                        _showDeleteConfirmationDialog(context, income);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+                          ],
+                        ),
+                      ],
                     ),
+                    trailing: Container(
+                      width: 80,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          income.amount.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: lightColorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                Icons.edit,
+                                color: lightColorScheme.primary,
+                                size: 20,
+                              ),
+                              constraints: const BoxConstraints(),
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                _showEditIncomeDialog(context, income);
+                              },
+                            ),
+                            const SizedBox(width: 4),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.redAccent,
+                                size: 20,
+                              ),
+                              constraints: const BoxConstraints(),
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                _showDeleteConfirmationDialog(context, income);
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -302,8 +305,8 @@ class _IncomesPageState extends State<IncomesPage> {
   }
 
   void _showEditIncomeDialog(
-    BuildContext context, IncomeListDTO income,
-  ) {
+      BuildContext context, IncomeListDTO income,
+      ) {
     final incomeMap = {
       'id': income.id,
       'name': income.name,
@@ -319,9 +322,9 @@ class _IncomesPageState extends State<IncomesPage> {
   }
 
   Widget _buildIncomeDialog(
-    BuildContext context,
-    Map<String, dynamic>? income,
-  ) {
+      BuildContext context,
+      Map<String, dynamic>? income,
+      ) {
     final isEditing = income != null;
     final nameController = TextEditingController(
       text: isEditing ? income['name'] : '',
@@ -355,20 +358,20 @@ class _IncomesPageState extends State<IncomesPage> {
               value: selectedCategory,
               decoration: const InputDecoration(labelText: 'Categoria'),
               items:
-                  [
-                        'Trabalho',
-                        'Investimentos',
-                        'Imóveis',
-                        'Presentes',
-                        'Outros',
-                      ]
-                      .map(
-                        (category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category),
-                        ),
-                      )
-                      .toList(),
+              [
+                'Trabalho',
+                'Investimentos',
+                'Imóveis',
+                'Presentes',
+                'Outros',
+              ]
+                  .map(
+                    (category) => DropdownMenuItem(
+                  value: category,
+                  child: Text(category),
+                ),
+              )
+                  .toList(),
               onChanged: (value) {
                 if (value != null) {
                   selectedCategory = value;
