@@ -25,6 +25,10 @@ class _SigninPageState extends State<SigninPage> {
   bool _rememberMe = true;
   bool _isLoading = false;
 
+  void configureApiClientWithToken(String token) {
+    defaultApiClient.addDefaultHeader('Authorization', 'Bearer $token');
+  }
+
   void _login() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -43,6 +47,7 @@ class _SigninPageState extends State<SigninPage> {
       if (credencial != null) {
         userSession.userId = credencial.id;
         userSession.token = credencial.accessToken;
+        configureApiClientWithToken(userSession.token!);
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login realizado com sucesso!')),
@@ -105,6 +110,7 @@ class _SigninPageState extends State<SigninPage> {
                           return null;
                         },
                         decoration: _inputDecoration('Email'),
+
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
