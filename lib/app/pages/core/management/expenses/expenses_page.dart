@@ -137,6 +137,14 @@ class _ExpensesPageState extends State<ExpensesPage> {
                       children: [
                         const SizedBox(height: 4),
                         Text(
+                          expense['amount'],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.redAccent,
+                          ),
+                        ),
+                        Text(
                           expense['description'],
                           style: TextStyle(
                             color: Colors.grey.shade700,
@@ -177,14 +185,6 @@ class _ExpensesPageState extends State<ExpensesPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          expense['amount'],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.redAccent,
-                          ),
-                        ),
                         const SizedBox(height: 8),
                         Row(
                           mainAxisSize: MainAxisSize.min,

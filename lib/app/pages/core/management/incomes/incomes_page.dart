@@ -213,6 +213,7 @@ class _IncomesPageState extends State<IncomesPage> {
                               horizontal: 16,
                               vertical: 8,
                             ),
+
                             title: Text(
                               income.name.toString(),
                               style: const TextStyle(
@@ -224,6 +225,14 @@ class _IncomesPageState extends State<IncomesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 4),
+                                Text(
+                                  income.amount.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: lightColorScheme.primary,
+                                  ),
+                                ),
                                 Text(
                                   income.description.toString(),
                                   style: TextStyle(
@@ -268,14 +277,6 @@ class _IncomesPageState extends State<IncomesPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text(
-                                  income.amount.toString(),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: lightColorScheme.primary,
-                                  ),
-                                ),
                                 const SizedBox(height: 8),
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -284,7 +285,7 @@ class _IncomesPageState extends State<IncomesPage> {
                                       icon: Icon(
                                         Icons.edit,
                                         color: lightColorScheme.primary,
-                                        size: 20,
+                                        size: 24,
                                       ),
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
@@ -297,7 +298,7 @@ class _IncomesPageState extends State<IncomesPage> {
                                       icon: const Icon(
                                         Icons.delete,
                                         color: Colors.redAccent,
-                                        size: 20,
+                                        size: 24,
                                       ),
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
