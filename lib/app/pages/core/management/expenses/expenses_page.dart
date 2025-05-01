@@ -137,6 +137,14 @@ class _ExpensesPageState extends State<ExpensesPage> {
                       children: [
                         const SizedBox(height: 4),
                         Text(
+                          expense['amount'],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.redAccent,
+                          ),
+                        ),
+                        Text(
                           expense['description'],
                           style: TextStyle(
                             color: Colors.grey.shade700,
@@ -173,35 +181,19 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         ),
                       ],
                     ),
-                    trailing: Container(
-                      width: 80,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            expense['amount'],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.edit,
-                                  color: lightColorScheme.primary,
-                                  size: 20,
-                                ),
-                                constraints: const BoxConstraints(),
-                                padding: EdgeInsets.zero,
-                                onPressed: () {
-                                  _showEditExpenseDialog(context, expense);
-                                },
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                Icons.edit,
+                                color: lightColorScheme.primary,
+                                size: 20,
                               ),
                               IconButton(
                                 icon: const Icon(
