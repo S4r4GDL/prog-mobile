@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:prog_mobile_app_educadin/app/pages/core/home/dashboard_page.dart';
 import 'package:prog_mobile_app_educadin/app/pages/core/management/preferences/preferences_page.dart';
-
 import '../../../widgets/manage_default.dart';
+import '../../login/signin_page.dart';
+import '../../login/user_session.dart';
 import '../management/incomes/incomes_page.dart';
 import '../management/goals/goals_page.dart';
 import '../management/expenses/expenses_page.dart';
+import 'logout_dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,11 +22,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _handleLogout() {
-    print("Sair do sistema");
+    LogoutDialog.show(context, () {
+      userSession.clear();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const SigninPage()),
+            (route) => false,
+      );
+    });
   }
 
   void _handleUserPressed() {
-    print("Usuario");
+    print("Usuário");
+  }
+
+  void _handleNotificationPressed() {
+    print("Notificações");
   }
 
   @override
@@ -33,6 +46,7 @@ class _HomePageState extends State<HomePage> {
       title: 'Home',
       onLogout: _handleLogout,
       onUserPressed: _handleUserPressed,
+      onNottfication: _handleNotificationPressed,
       drawer: Drawer(
         width: 200,
         child: ListView(
@@ -65,9 +79,8 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('Sair'),
+              onTap: _handleLogout,
             ),
-
-
           ],
         ),
       ),

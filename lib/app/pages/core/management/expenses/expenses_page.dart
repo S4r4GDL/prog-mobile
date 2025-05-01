@@ -195,29 +195,24 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                 color: lightColorScheme.primary,
                                 size: 20,
                               ),
-                              constraints: const BoxConstraints(),
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                _showEditExpenseDialog(context, expense);
-                              },
-                            ),
-                            const SizedBox(width: 8),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.redAccent,
-                                size: 20,
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.redAccent,
+                                  size: 20,
+                                ),
+                                constraints: const BoxConstraints(),
+                                padding: EdgeInsets.zero,
+                                onPressed: () {
+                                  _showDeleteConfirmationDialog(context, expense);
+                                },
                               ),
-                              constraints: const BoxConstraints(),
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                _showDeleteConfirmationDialog(context, expense);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
+
                   ),
                 );
               },

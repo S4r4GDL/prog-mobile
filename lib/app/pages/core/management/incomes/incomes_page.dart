@@ -12,51 +12,23 @@ class IncomesPage extends StatefulWidget {
 }
 
 class _IncomesPageState extends State<IncomesPage> {
-  // final List<Map<String, dynamic>> _incomes = [
-  //   {
-  //     'id': 1,
-  //     'name': 'Salário',
-  //     'category': 'Trabalho',
-  //     'description': 'Salário mensal',
-  //     'incomeDate': DateTime.now().subtract(const Duration(days: 5)),
-  //     'amount': 'R\$ 3.500,00',
-  //   },
-  //   {
-  //     'id': 2,
-  //     'name': 'Freelance',
-  //     'category': 'Trabalho',
-  //     'description': 'Projeto de design',
-  //     'incomeDate': DateTime.now().subtract(const Duration(days: 10)),
-  //     'amount': 'R\$ 800,00',
-  //   },
-  //   {
-  //     'id': 3,
-  //     'name': 'Dividendos',
-  //     'category': 'Investimentos',
-  //     'description': 'Rendimentos de ações',
-  //     'incomeDate': DateTime.now().subtract(const Duration(days: 15)),
-  //     'amount': 'R\$ 250,00',
-  //   },
-  //   {
-  //     'id': 4,
-  //     'name': 'Aluguel',
-  //     'category': 'Imóveis',
-  //     'description': 'Aluguel do apartamento',
-  //     'incomeDate': DateTime.now().subtract(const Duration(days: 2)),
-  //     'amount': 'R\$ 1.200,00',
-  //   },
-  // ];
 
   final IncomeControllerApi _api = IncomeControllerApi();
   List<IncomeListDTO> _incomes = [];
   bool _isLoading = true;
 
   Future<void> _loadIncomes() async {
+    final userId = userSession.userId;
+    if (userId == null) return;
+
     try {
-      final result = await _api.incomeControllerListAll();
+      final result = await _api.incomeControllerGetByUserId(userId);
       setState(() {
         print(result);
-        _incomes = result?.where((income) => income.userId == userSession.userId).toList() ?? [];
+        _incomes = result
+            ?.where((income) => income.userId == userId)
+            .toList() ??
+            [];
         _isLoading = false;
       });
     } catch (e) {
@@ -64,6 +36,7 @@ class _IncomesPageState extends State<IncomesPage> {
       setState(() => _isLoading = false);
     }
   }
+
 
   Future<void> _addIncome(newIncome) async {
     try {
@@ -111,11 +84,11 @@ class _IncomesPageState extends State<IncomesPage> {
           context: context,
           builder:
               (_) => AlertDialog(
-                title: Text("Detalhes do Rendimento"),
-                content: Text(
-                  'Descrição: ${income.description}\nValor: ${income.amount}\nRepetível: ${income.repeatable}',
-                ),
-              ),
+            title: Text("Detalhes do Rendimento"),
+            content: Text(
+              'Descrição: ${income.description}\nValor: ${income.amount}\nRepetível: ${income.repeatable}',
+            ),
+          ),
         );
       }
     } catch (e) {
@@ -139,7 +112,7 @@ class _IncomesPageState extends State<IncomesPage> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                Expanded(
+                Flexible(
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Pesquisar receitas',
@@ -195,18 +168,40 @@ class _IncomesPageState extends State<IncomesPage> {
           ),
           Expanded(
             child:
-                _isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: _incomes.length,
-                      itemBuilder: (context, index) {
-                        final income = _incomes[index];
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: _incomes.length,
+              itemBuilder: (context, index) {
+                final income = _incomes[index];
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    title: Text(
+                      income.name.toString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
+                        Text(
+                          income.description.toString(),
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontSize: 14,
                           ),
                           child: ListTile(
                             contentPadding: const EdgeInsets.symmetric(
@@ -271,7 +266,7 @@ class _IncomesPageState extends State<IncomesPage> {
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
                             trailing: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -310,10 +305,62 @@ class _IncomesPageState extends State<IncomesPage> {
                                 ),
                               ],
                             ),
-                          ),
-                        );
-                      },
+                          ],
+                        ),
+                      ],
                     ),
+                    trailing: Container(
+                      width: 80,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          income.amount.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: lightColorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                Icons.edit,
+                                color: lightColorScheme.primary,
+                                size: 20,
+                              ),
+                              constraints: const BoxConstraints(),
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                _showEditIncomeDialog(context, income);
+                              },
+                            ),
+                            const SizedBox(width: 4),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.redAccent,
+                                size: 20,
+                              ),
+                              constraints: const BoxConstraints(),
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                _showDeleteConfirmationDialog(context, income);
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -330,8 +377,8 @@ class _IncomesPageState extends State<IncomesPage> {
   }
 
   void _showEditIncomeDialog(
-    BuildContext context, IncomeListDTO income,
-  ) {
+      BuildContext context, IncomeListDTO income,
+      ) {
     final incomeMap = {
       'id': income.id,
       'name': income.name,
@@ -347,9 +394,9 @@ class _IncomesPageState extends State<IncomesPage> {
   }
 
   Widget _buildIncomeDialog(
-    BuildContext context,
-    Map<String, dynamic>? income,
-  ) {
+      BuildContext context,
+      Map<String, dynamic>? income,
+      ) {
     final isEditing = income != null;
     final nameController = TextEditingController(
       text: isEditing ? income['name'] : '',
@@ -383,20 +430,20 @@ class _IncomesPageState extends State<IncomesPage> {
               value: selectedCategory,
               decoration: const InputDecoration(labelText: 'Categoria'),
               items:
-                  [
-                        'Trabalho',
-                        'Investimentos',
-                        'Imóveis',
-                        'Presentes',
-                        'Outros',
-                      ]
-                      .map(
-                        (category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category),
-                        ),
-                      )
-                      .toList(),
+              [
+                'Trabalho',
+                'Investimentos',
+                'Imóveis',
+                'Presentes',
+                'Outros',
+              ]
+                  .map(
+                    (category) => DropdownMenuItem(
+                  value: category,
+                  child: Text(category),
+                ),
+              )
+                  .toList(),
               onChanged: (value) {
                 if (value != null) {
                   selectedCategory = value;
