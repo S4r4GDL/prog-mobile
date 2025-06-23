@@ -1,5 +1,6 @@
 import 'package:educadinapi/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../../widgets/manage_default.dart';
 import '../../../../theme/theme.dart';
 import '../../../login/user_session.dart';
@@ -12,7 +13,6 @@ class IncomesPage extends StatefulWidget {
 }
 
 class _IncomesPageState extends State<IncomesPage> {
-
   final IncomeControllerApi _api = IncomeControllerApi();
   List<IncomeListDTO> _incomes = [];
   bool _isLoading = true;
@@ -24,7 +24,6 @@ class _IncomesPageState extends State<IncomesPage> {
     try {
       final result = await _api.incomeControllerGetByUserId(userId);
       setState(() {
-        print(result);
         _incomes = result
             ?.where((income) => income.userId == userId)
             .toList() ??
@@ -36,7 +35,6 @@ class _IncomesPageState extends State<IncomesPage> {
       setState(() => _isLoading = false);
     }
   }
-
 
   Future<void> _addIncome(newIncome) async {
     try {
@@ -57,42 +55,11 @@ class _IncomesPageState extends State<IncomesPage> {
   }
 
   Future<void> _editIncome(int id, updatedIncome) async {
-    //Exemplo
-    // final updatedIncome = IncomeDTOCreateUpdate(
-    //   description: 'sagsedgsdrfrgdrfrg editadoooo mobile 3',
-    //   amount: 100,
-    //   categoryName: 'ewtg43e4r4t dfthy',
-    //   leadTime: 3,
-    //   incomeDate: DateTime.now(),
-    //   name: 'aetuh',
-    //   userId: 1,
-    //   repeatable: IncomeDTOCreateUpdateRepeatableEnum.MONTHLY,
-    // );
     try {
       await _api.incomeControllerUpdate(id, updatedIncome);
       _loadIncomes();
     } catch (e) {
       print("Erro ao atualizar rendimento: $e");
-    }
-  }
-
-  Future<void> _viewIncome(int id) async {
-    try {
-      final income = await _api.incomeControllerGetById(id);
-      if (income != null) {
-        showDialog(
-          context: context,
-          builder:
-              (_) => AlertDialog(
-            title: Text("Detalhes do Rendimento"),
-            content: Text(
-              'Descrição: ${income.description}\nValor: ${income.amount}\nRepetível: ${income.repeatable}',
-            ),
-          ),
-        );
-      }
-    } catch (e) {
-      print("Erro ao buscar detalhe: $e");
     }
   }
 
@@ -167,120 +134,111 @@ class _IncomesPageState extends State<IncomesPage> {
             ),
           ),
           Expanded(
-            child:
-            _isLoading
+            child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: _incomes.length,
               itemBuilder: (context, index) {
                 final income = _incomes[index];
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    title: Text(
-                      income.name.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                return Slidable(
+                  key: ValueKey(income.id),
+                  startActionPane: ActionPane(
+                    motion: const DrawerMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (_) =>
+                            _showEditIncomeDialog(context, income),
+                        backgroundColor: lightColorScheme.primary,
+                        foregroundColor: Colors.white,
+                        icon: Icons.edit,
+                        label: 'Editar',
                       ),
+                    ],
+                  ),
+                  endActionPane: ActionPane(
+                    motion: const DrawerMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (_) =>
+                            _showDeleteConfirmationDialog(context, income),
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Excluir',
+                      ),
+                    ],
+                  ),
+                  child: Card(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 4),
-                        Text(
-                          income.description.toString(),
-                          style: TextStyle(
-                            color: Colors.grey.shade700,
-                            fontSize: 14,
-                          ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      title: Text(
+                        income.name.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: lightColorScheme.surface,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                income.category!.name.toString(),
-                                style: TextStyle(
-                                  color: lightColorScheme.primary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 4),
+                          Text(
+                            income.description.toString(),
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: lightColorScheme.surface,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  income.category!.name.toString(),
+                                  style: TextStyle(
+                                    color: lightColorScheme.primary,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '${income.incomeDate!.day}/${income.incomeDate!.month}/${income.incomeDate!.year}',
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
-                                fontSize: 12,
+                              const SizedBox(width: 8),
+                              Text(
+                                '${income.incomeDate!.day}/${income.incomeDate!.month}/${income.incomeDate!.year}',
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 12,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          income.amount.toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: lightColorScheme.primary,
+                            ],
                           ),
+                        ],
+                      ),
+                      trailing: Text(
+                        income.amount.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: lightColorScheme.primary,
                         ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                Icons.edit,
-                                color: lightColorScheme.primary,
-                                size: 24,
-                              ),
-                              constraints: const BoxConstraints(),
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                _showEditIncomeDialog(context, income);
-                              },
-                            ),
-                            const SizedBox(width: 8),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.redAccent,
-                                size: 24,
-                              ),
-                              constraints: const BoxConstraints(),
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                _showDeleteConfirmationDialog(context, income);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 );
@@ -295,15 +253,11 @@ class _IncomesPageState extends State<IncomesPage> {
   void _showAddIncomeDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return _buildIncomeDialog(context, null);
-      },
+      builder: (_) => _buildIncomeDialog(context, null),
     );
   }
 
-  void _showEditIncomeDialog(
-      BuildContext context, IncomeListDTO income,
-      ) {
+  void _showEditIncomeDialog(BuildContext context, IncomeListDTO income) {
     final incomeMap = {
       'id': income.id,
       'name': income.name,
@@ -323,15 +277,12 @@ class _IncomesPageState extends State<IncomesPage> {
       Map<String, dynamic>? income,
       ) {
     final isEditing = income != null;
-    final nameController = TextEditingController(
-      text: isEditing ? income['name'] : '',
-    );
-    final descriptionController = TextEditingController(
-      text: isEditing ? income['description'] : '',
-    );
+    final nameController =
+    TextEditingController(text: isEditing ? income['name'] : '');
+    final descriptionController =
+    TextEditingController(text: isEditing ? income['description'] : '');
     final amountController = TextEditingController(
-      text: isEditing ? income['amount'].toString().replaceAll('R\$ ', '') : '',
-    );
+        text: isEditing ? income['amount'].toString() : '');
 
     String selectedCategory = isEditing ? income['category'] : 'Trabalho';
     DateTime selectedDate = isEditing ? income['incomeDate'] : DateTime.now();
@@ -345,29 +296,21 @@ class _IncomesPageState extends State<IncomesPage> {
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'Nome',
-                hintText: 'Nome da renda',
-              ),
+              decoration: const InputDecoration(labelText: 'Nome'),
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
               value: selectedCategory,
               decoration: const InputDecoration(labelText: 'Categoria'),
-              items:
-              [
+              items: [
                 'Trabalho',
                 'Investimentos',
                 'Imóveis',
                 'Presentes',
                 'Outros',
               ]
-                  .map(
-                    (category) => DropdownMenuItem(
-                  value: category,
-                  child: Text(category),
-                ),
-              )
+                  .map((category) =>
+                  DropdownMenuItem(value: category, child: Text(category)))
                   .toList(),
               onChanged: (value) {
                 if (value != null) {
@@ -378,10 +321,7 @@ class _IncomesPageState extends State<IncomesPage> {
             const SizedBox(height: 16),
             TextField(
               controller: descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Descrição',
-                hintText: 'Descrição da receita',
-              ),
+              decoration: const InputDecoration(labelText: 'Descrição'),
               maxLines: 2,
             ),
             const SizedBox(height: 16),
@@ -390,10 +330,8 @@ class _IncomesPageState extends State<IncomesPage> {
                 Expanded(
                   child: TextField(
                     controller: amountController,
-                    decoration: const InputDecoration(
-                      labelText: 'Valor (R\$)',
-                      hintText: '0,00',
-                    ),
+                    decoration:
+                    const InputDecoration(labelText: 'Valor (R\$)'),
                     keyboardType: TextInputType.number,
                   ),
                 ),
@@ -401,21 +339,22 @@ class _IncomesPageState extends State<IncomesPage> {
                 Expanded(
                   child: InkWell(
                     onTap: () async {
-                      final DateTime? picked = await showDatePicker(
+                      final picked = await showDatePicker(
                         context: context,
                         initialDate: selectedDate,
                         firstDate: DateTime(2020),
-                        lastDate: DateTime(2025),
+                        lastDate: DateTime(2100),
                       );
-                      if (picked != null && picked != selectedDate) {
-                        selectedDate = picked;
+                      if (picked != null) {
+                        setState(() {
+                          selectedDate = picked;
+                        });
                       }
                     },
                     child: InputDecorator(
                       decoration: const InputDecoration(labelText: 'Data'),
                       child: Text(
-                        '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
-                      ),
+                          '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}'),
                     ),
                   ),
                 ),
@@ -426,9 +365,7 @@ class _IncomesPageState extends State<IncomesPage> {
       ),
       actions: [
         TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancelar'),
         ),
         ElevatedButton(
@@ -436,17 +373,20 @@ class _IncomesPageState extends State<IncomesPage> {
             final incomeDTO = IncomeDTOCreateUpdate(
               name: nameController.text,
               description: descriptionController.text,
-              amount: double.tryParse(amountController.text.replaceAll(',', '.')) ?? 0,
+              amount:
+              double.tryParse(amountController.text.replaceAll(',', '.')) ??
+                  0,
               categoryName: selectedCategory,
               incomeDate: selectedDate,
               leadTime: 1,
               userId: userSession.userId!,
               repeatable: IncomeDTOCreateUpdateRepeatableEnum.DONT_REPEATS,
             );
+
             if (isEditing) {
-              _editIncome(income!['id'], incomeDTO); // edita usando id
+              _editIncome(income!['id'], incomeDTO);
             } else {
-              _addIncome(incomeDTO); // criação normal
+              _addIncome(incomeDTO);
             }
 
             Navigator.of(context).pop();
@@ -460,41 +400,31 @@ class _IncomesPageState extends State<IncomesPage> {
     );
   }
 
-
-
   void _showDeleteConfirmationDialog(
       BuildContext context,
       IncomeListDTO income,
       ) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmar exclusão'),
-          content: Text(
-            'Deseja realmente excluir a receita "${income.name}"?',
+      builder: (_) => AlertDialog(
+        title: const Text('Confirmar exclusão'),
+        content:
+        Text('Deseja realmente excluir a receita "${income.name}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancelar'),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancelar'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _deleteIncome(income.id!);
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-              ),
-              child: const Text('Excluir'),
-            ),
-          ],
-        );
-      },
+          ElevatedButton(
+            onPressed: () {
+              _deleteIncome(income.id!);
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
     );
   }
-
 }
