@@ -13,16 +13,18 @@ class ExpensesPage extends StatefulWidget {
 }
 
 class _ExpensesPageState extends State<ExpensesPage> {
+  // Altere para ExpenseControllerApi
   final ExpenseControllerApi _api = ExpenseControllerApi();
-  List<ExpenseListDTO> _expenses = [];
+  List<ExpenseListDTO> _expenses = []; // Lista para despesas
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadExpenses();
+    _loadExpenses(); // Carrega as despesas ao iniciar a tela
   }
 
+  // Carrega as despesas do backend
   Future<void> _loadExpenses() async {
     final userId = userSession.userId;
     if (userId == null) {
@@ -31,8 +33,8 @@ class _ExpensesPageState extends State<ExpensesPage> {
     }
 
     try {
-      setState(() => _isLoading = true);
-      final result = await _api.expenseControllerGetByUserId(userId);
+      setState(() => _isLoading = true); // Inicia o loading
+      final result = await _api.expenseControllerGetByUserId(userId); // Chamada da API para despesas
       setState(() {
         _expenses =
             result?.where((expense) => expense.userId == userId).toList() ??
@@ -42,6 +44,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
     } catch (e) {
       print("Erro ao buscar despesas: $e");
       setState(() => _isLoading = false);
+      // Opcional: mostrar uma mensagem de erro para o usuário
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erro ao carregar despesas: ${e.toString()}')),
@@ -50,15 +53,16 @@ class _ExpensesPageState extends State<ExpensesPage> {
     }
   }
 
+  // Adiciona uma nova despesa
   Future<void> _addExpense(ExpenseDTOCreateUpdate newExpense) async {
     try {
-      await _api.expenseControllerCreate(newExpense);
+      await _api.expenseControllerCreate(newExpense); // Chamada da API para criar despesa
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Despesa "${newExpense.name}" adicionada com sucesso!')),
         );
       }
-      _loadExpenses();
+      _loadExpenses(); // Recarrega a lista após adicionar
     } catch (e) {
       print("Erro ao criar despesa: $e");
       if (mounted) {
@@ -69,15 +73,16 @@ class _ExpensesPageState extends State<ExpensesPage> {
     }
   }
 
+  // Exclui uma despesa
   Future<void> _deleteExpense(int id) async {
     try {
-      await _api.expenseControllerRemove(id);
+      await _api.expenseControllerRemove(id); // Chamada da API para remover despesa
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Despesa excluída com sucesso!')),
         );
       }
-      _loadExpenses();
+      _loadExpenses(); // Recarrega a lista após excluir
     } catch (e) {
       print("Erro ao remover despesa: $e");
       if (mounted) {
@@ -88,15 +93,16 @@ class _ExpensesPageState extends State<ExpensesPage> {
     }
   }
 
+  // Edita uma despesa existente
   Future<void> _editExpense(int id, ExpenseDTOCreateUpdate updatedExpense) async {
     try {
-      await _api.expenseControllerUpdate(id, updatedExpense);
+      await _api.expenseControllerUpdate(id, updatedExpense); // Chamada da API para atualizar despesa
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Despesa "${updatedExpense.name}" atualizada com sucesso!')),
         );
       }
-      _loadExpenses();
+      _loadExpenses(); // Recarrega a lista após editar
     } catch (e) {
       print("Erro ao atualizar despesa: $e");
       if (mounted) {
@@ -110,7 +116,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
   @override
   Widget build(BuildContext context) {
     return ManageDefaultScaffold(
-      title: 'Minhas Despesas',
+      title: 'Minhas Despesas', // Título da tela alterado
       child: Column(
         children: [
           Padding(
@@ -120,7 +126,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                 Flexible(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'Pesquisar despesas',
+                      hintText: 'Pesquisar despesas', // Texto de dica alterado
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -133,7 +139,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
-                          color: lightColorScheme.primary,
+                          color: lightColorScheme.primary, // Mantém a cor primária para borda de foco
                           width: 2,
                         ),
                       ),
@@ -146,10 +152,10 @@ class _ExpensesPageState extends State<ExpensesPage> {
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: () {
-                    _showAddExpenseDialog(context);
+                    _showAddExpenseDialog(context); // Chama o diálogo de adicionar despesa
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
+                    backgroundColor: Colors.redAccent, // Cor do botão de adicionar alterada
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -177,12 +183,12 @@ class _ExpensesPageState extends State<ExpensesPage> {
                 : _expenses.isEmpty
                 ? const Center(
                 child: Text('Nenhuma despesa encontrada.',
-                    style: TextStyle(fontSize: 16, color: Colors.red)))
+                    style: TextStyle(fontSize: 16, color: Colors.grey)))
                 : ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: _expenses.length,
               itemBuilder: (context, index) {
-                final expense = _expenses[index];
+                final expense = _expenses[index]; // Usa 'expense'
                 return Slidable(
                   key: ValueKey(expense.id),
                   startActionPane: ActionPane(
@@ -190,7 +196,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     children: [
                       SlidableAction(
                         onPressed: (_) => _showEditExpenseDialog(
-                            context, expense),
+                            context, expense), // Chama o diálogo de edição
                         backgroundColor: lightColorScheme.primary,
                         foregroundColor: Colors.white,
                         icon: Icons.edit,
@@ -204,7 +210,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                       SlidableAction(
                         onPressed: (_) =>
                             _showDeleteConfirmationDialog(
-                                context, expense),
+                                context, expense), // Chama o diálogo de confirmação de exclusão
                         backgroundColor: Colors.redAccent,
                         foregroundColor: Colors.white,
                         icon: Icons.delete,
@@ -224,7 +230,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         vertical: 8,
                       ),
                       title: Text(
-                        expense.name.toString(),
+                        expense.name.toString(), // Exibe o nome da despesa
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -235,7 +241,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         children: [
                           const SizedBox(height: 4),
                           Text(
-                            expense.description.toString(),
+                            expense.description.toString(), // Exibe a descrição da despesa
                             style: TextStyle(
                               color: Colors.grey.shade700,
                               fontSize: 14,
@@ -255,7 +261,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                   BorderRadius.circular(12),
                                 ),
                                 child: Text(
-                                  expense.category!.name.toString(),
+                                  expense.category!.name.toString(), // Exibe a categoria da despesa
                                   style: TextStyle(
                                     color: lightColorScheme.primary,
                                     fontSize: 12,
@@ -265,7 +271,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                '${expense.expenseDate!.day}/${expense.expenseDate!.month}/${expense.expenseDate!.year}',
+                                '${expense.expenseDate!.day}/${expense.expenseDate!.month}/${expense.expenseDate!.year}', // Exibe a data da despesa
                                 style: TextStyle(
                                   color: Colors.grey.shade600,
                                   fontSize: 12,
@@ -297,7 +303,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
   void _showAddExpenseDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => _buildExpenseDialog(context, null),
+      builder: (_) => _buildExpenseDialog(context, null), // Chama o diálogo de despesas
     );
   }
 
@@ -308,11 +314,11 @@ class _ExpensesPageState extends State<ExpensesPage> {
       'description': expense.description,
       'amount': expense.amount,
       'category': expense.category?.name ?? '',
-      'expenseDate': expense.expenseDate,
+      'expenseDate': expense.expenseDate, // Campo renomeado
     };
     showDialog(
       context: context,
-      builder: (_) => _buildExpenseDialog(context, expenseMap),
+      builder: (_) => _buildExpenseDialog(context, expenseMap), // Chama o diálogo de despesas
     );
   }
 
@@ -329,13 +335,13 @@ class _ExpensesPageState extends State<ExpensesPage> {
         text: isEditing ? expense['amount'].toString() : '');
 
     String selectedCategory =
-    isEditing ? expense['category'] : 'Alimentação';
+    isEditing ? expense['category'] : 'Alimentação'; // Categorias de despesas
     DateTime selectedDate =
-    isEditing ? expense['expenseDate'] : DateTime.now();
+    isEditing ? expense['expenseDate'] : DateTime.now(); // Campo renomeado
 
     return AlertDialog(
       title: Text(
-          isEditing ? 'Editar Despesa' : 'Adicionar Despesa'),
+          isEditing ? 'Editar Despesa' : 'Adicionar Despesa'), // Título do diálogo
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -346,7 +352,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
               decoration: const InputDecoration(labelText: 'Nome'),
             ),
             const SizedBox(height: 16),
-
+            // Utiliza StatefulBuilder para atualizar o DropdownButtonFormField
             StatefulBuilder(
               builder: (BuildContext context, StateSetter setStateDropdown) {
                 return DropdownButtonFormField<String>(
@@ -367,7 +373,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                   onChanged: (value) {
                     if (value != null) {
                       setStateDropdown(() {
-
+                        // Usa setStateDropdown para atualizar o estado do Dropdown
                         selectedCategory = value;
                       });
                     }
@@ -403,6 +409,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         lastDate: DateTime(2100),
                       );
                       if (picked != null) {
+                        // Usa o setState do diálogo para atualizar a data
                         setState(() {
                           selectedDate = picked;
                         });
@@ -427,30 +434,30 @@ class _ExpensesPageState extends State<ExpensesPage> {
         ),
         ElevatedButton(
           onPressed: () {
-            final expenseDTO = ExpenseDTOCreateUpdate(
+            final expenseDTO = ExpenseDTOCreateUpdate( // Cria um DTO de despesa
               name: nameController.text,
               description: descriptionController.text,
               amount:
               double.tryParse(amountController.text.replaceAll(',', '.')) ??
                   0,
               categoryName: selectedCategory,
-              expenseDate: selectedDate,
-              leadTime: 1,
+              expenseDate: selectedDate, // Campo renomeado
+              leadTime: 1, // Mantido como 1, ajuste se necessário
               userId: userSession.userId!,
               repeatable:
-              ExpenseDTOCreateUpdateRepeatableEnum.DONT_REPEATS,
+              ExpenseDTOCreateUpdateRepeatableEnum.DONT_REPEATS, // Mantido, ajuste se necessário
             );
 
             if (isEditing) {
-              _editExpense(expense!['id'], expenseDTO);
+              _editExpense(expense!['id'], expenseDTO); // Edita a despesa
             } else {
-              _addExpense(expenseDTO);
+              _addExpense(expenseDTO); // Adiciona a despesa
             }
 
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.redAccent,
+            backgroundColor: Colors.redAccent, // Cor do botão de salvar/adicionar
           ),
           child: Text(isEditing ? 'Salvar' : 'Adicionar'),
         ),
@@ -460,14 +467,14 @@ class _ExpensesPageState extends State<ExpensesPage> {
 
   void _showDeleteConfirmationDialog(
       BuildContext context,
-      ExpenseListDTO expense,
+      ExpenseListDTO expense, // Usa ExpenseListDTO
       ) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Confirmar exclusão'),
         content: Text(
-            'Deseja realmente excluir a despesa "${expense.name}"?'),
+            'Deseja realmente excluir a despesa "${expense.name}"?'), // Mensagem de confirmação
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -475,7 +482,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
           ),
           ElevatedButton(
             onPressed: () {
-              _deleteExpense(expense.id!);
+              _deleteExpense(expense.id!); // Deleta a despesa
               Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
