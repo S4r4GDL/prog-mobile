@@ -152,10 +152,10 @@ class _ExpensesPageState extends State<ExpensesPage> {
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: () {
-                    _showAddExpenseDialog(context); // Chama o diálogo de adicionar despesa
+                    _showAddExpenseDialog(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent, // Cor do botão de adicionar alterada
+                    backgroundColor: Colors.lightGreen,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -196,7 +196,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     children: [
                       SlidableAction(
                         onPressed: (_) => _showEditExpenseDialog(
-                            context, expense), // Chama o diálogo de edição
+                            context, expense),
                         backgroundColor: lightColorScheme.primary,
                         foregroundColor: Colors.white,
                         icon: Icons.edit,
@@ -210,7 +210,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                       SlidableAction(
                         onPressed: (_) =>
                             _showDeleteConfirmationDialog(
-                                context, expense), // Chama o diálogo de confirmação de exclusão
+                                context, expense),
                         backgroundColor: Colors.redAccent,
                         foregroundColor: Colors.white,
                         icon: Icons.delete,
@@ -230,7 +230,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         vertical: 8,
                       ),
                       title: Text(
-                        expense.name.toString(), // Exibe o nome da despesa
+                        expense.name.toString(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -241,7 +241,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         children: [
                           const SizedBox(height: 4),
                           Text(
-                            expense.description.toString(), // Exibe a descrição da despesa
+                            expense.description.toString(),
                             style: TextStyle(
                               color: Colors.grey.shade700,
                               fontSize: 14,
@@ -256,14 +256,14 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: lightColorScheme.surface,
+                                  color: Colors.red,
                                   borderRadius:
                                   BorderRadius.circular(12),
                                 ),
                                 child: Text(
-                                  expense.category!.name.toString(), // Exibe a categoria da despesa
+                                  expense.category!.name.toString(),
                                   style: TextStyle(
-                                    color: lightColorScheme.primary,
+                                    color: Colors.white,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -271,7 +271,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                '${expense.expenseDate!.day}/${expense.expenseDate!.month}/${expense.expenseDate!.year}', // Exibe a data da despesa
+                                '${expense.expenseDate!.day}/${expense.expenseDate!.month}/${expense.expenseDate!.year}',
                                 style: TextStyle(
                                   color: Colors.grey.shade600,
                                   fontSize: 12,
@@ -282,7 +282,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         ],
                       ),
                       trailing: Text(
-                        'R\$ ${expense.amount!.toStringAsFixed(2).replaceAll('.', ',')}', // Formata e exibe o valor da despesa
+                        'R\$ ${expense.amount!.toStringAsFixed(2).replaceAll('.', ',')}',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
