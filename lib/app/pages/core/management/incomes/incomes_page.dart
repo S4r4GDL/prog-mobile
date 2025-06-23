@@ -13,60 +13,99 @@ class IncomesPage extends StatefulWidget {
 }
 
 class _IncomesPageState extends State<IncomesPage> {
+
   final IncomeControllerApi _api = IncomeControllerApi();
   List<IncomeListDTO> _incomes = [];
   bool _isLoading = true;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadIncomes();
+  }
+
   Future<void> _loadIncomes() async {
     final userId = userSession.userId;
-    if (userId == null) return;
+    if (userId == null) {
+      setState(() => _isLoading = false);
+      return;
+    }
 
     try {
+      setState(() => _isLoading = true);
       final result = await _api.incomeControllerGetByUserId(userId);
       setState(() {
-        _incomes = result
-            ?.where((income) => income.userId == userId)
-            .toList() ??
-            [];
+        _incomes =
+            result?.where((income) => income.userId == userId).toList() ?? [];
         _isLoading = false;
       });
     } catch (e) {
-      print("Erro ao buscar rendimentos: $e");
+      print("Erro ao buscar receitas: $e");
       setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao carregar receitas: ${e.toString()}')),
+        );
+      }
     }
   }
 
-  Future<void> _addIncome(newIncome) async {
+
+  Future<void> _addIncome(IncomeDTOCreateUpdate newIncome) async {
     try {
       await _api.incomeControllerCreate(newIncome);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Receita "${newIncome.name}" adicionada com sucesso!')),
+        );
+      }
       _loadIncomes();
     } catch (e) {
-      print("Erro ao criar rendimento: $e");
+      print("Erro ao criar receita: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao adicionar receita: ${e.toString()}')),
+        );
+      }
     }
   }
 
   Future<void> _deleteIncome(int id) async {
     try {
       await _api.incomeControllerRemove(id);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Receita excluída com sucesso!')),
+        );
+      }
       _loadIncomes();
     } catch (e) {
-      print("Erro ao remover rendimento: $e");
+      print("Erro ao remover receita: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao excluir receita: ${e.toString()}')),
+        );
+      }
     }
   }
 
-  Future<void> _editIncome(int id, updatedIncome) async {
+  Future<void> _editIncome(int id, IncomeDTOCreateUpdate updatedIncome) async {
     try {
       await _api.incomeControllerUpdate(id, updatedIncome);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Receita "${updatedIncome.name}" atualizada com sucesso!')),
+        );
+      }
       _loadIncomes();
     } catch (e) {
-      print("Erro ao atualizar rendimento: $e");
+      print("Erro ao atualizar receita: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao atualizar receita: ${e.toString()}')),
+        );
+      }
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadIncomes();
   }
 
   @override
@@ -136,6 +175,10 @@ class _IncomesPageState extends State<IncomesPage> {
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
+                : _incomes.isEmpty
+                ? const Center(
+                child: Text('Nenhuma receita encontrada.',
+                    style: TextStyle(fontSize: 16, color: Colors.grey)))
                 : ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: _incomes.length,
@@ -147,8 +190,8 @@ class _IncomesPageState extends State<IncomesPage> {
                     motion: const DrawerMotion(),
                     children: [
                       SlidableAction(
-                        onPressed: (_) =>
-                            _showEditIncomeDialog(context, income),
+                        onPressed: (_) => _showEditIncomeDialog(
+                            context, income),
                         backgroundColor: lightColorScheme.primary,
                         foregroundColor: Colors.white,
                         icon: Icons.edit,
@@ -161,7 +204,8 @@ class _IncomesPageState extends State<IncomesPage> {
                     children: [
                       SlidableAction(
                         onPressed: (_) =>
-                            _showDeleteConfirmationDialog(context, income),
+                            _showDeleteConfirmationDialog(
+                                context, income),
                         backgroundColor: Colors.redAccent,
                         foregroundColor: Colors.white,
                         icon: Icons.delete,
@@ -208,7 +252,8 @@ class _IncomesPageState extends State<IncomesPage> {
                                 ),
                                 decoration: BoxDecoration(
                                   color: lightColorScheme.surface,
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius:
+                                  BorderRadius.circular(12),
                                 ),
                                 child: Text(
                                   income.category!.name.toString(),
@@ -232,7 +277,7 @@ class _IncomesPageState extends State<IncomesPage> {
                         ],
                       ),
                       trailing: Text(
-                        income.amount.toString(),
+                        'R\$ ${income.amount!.toStringAsFixed(2).replaceAll('.', ',')}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -284,11 +329,14 @@ class _IncomesPageState extends State<IncomesPage> {
     final amountController = TextEditingController(
         text: isEditing ? income['amount'].toString() : '');
 
-    String selectedCategory = isEditing ? income['category'] : 'Trabalho';
-    DateTime selectedDate = isEditing ? income['incomeDate'] : DateTime.now();
+    String selectedCategory =
+    isEditing ? income['category'] : 'Trabalho';
+    DateTime selectedDate =
+    isEditing ? income['incomeDate'] : DateTime.now();
 
     return AlertDialog(
-      title: Text(isEditing ? 'Editar Renda' : 'Adicionar Renda'),
+      title: Text(
+          isEditing ? 'Editar Renda' : 'Adicionar Renda'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -299,23 +347,29 @@ class _IncomesPageState extends State<IncomesPage> {
               decoration: const InputDecoration(labelText: 'Nome'),
             ),
             const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              value: selectedCategory,
-              decoration: const InputDecoration(labelText: 'Categoria'),
-              items: [
-                'Trabalho',
-                'Investimentos',
-                'Imóveis',
-                'Presentes',
-                'Outros',
-              ]
-                  .map((category) =>
-                  DropdownMenuItem(value: category, child: Text(category)))
-                  .toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  selectedCategory = value;
-                }
+
+            StatefulBuilder(
+              builder: (BuildContext context, StateSetter setStateDropdown) {
+                return DropdownButtonFormField<String>(
+                  value: selectedCategory,
+                  decoration: const InputDecoration(labelText: 'Categoria'),
+                  items: [
+                    'Trabalho',
+                    'Investimentos',
+                    'Imóveis',
+                    'Presentes',
+                    'Outros',
+                  ].map((category) {
+                    return DropdownMenuItem(value: category, child: Text(category));
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setStateDropdown(() {
+                        selectedCategory = value;
+                      });
+                    }
+                  },
+                );
               },
             ),
             const SizedBox(height: 16),
@@ -380,7 +434,8 @@ class _IncomesPageState extends State<IncomesPage> {
               incomeDate: selectedDate,
               leadTime: 1,
               userId: userSession.userId!,
-              repeatable: IncomeDTOCreateUpdateRepeatableEnum.DONT_REPEATS,
+              repeatable:
+              IncomeDTOCreateUpdateRepeatableEnum.DONT_REPEATS,
             );
 
             if (isEditing) {
@@ -408,8 +463,8 @@ class _IncomesPageState extends State<IncomesPage> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Confirmar exclusão'),
-        content:
-        Text('Deseja realmente excluir a receita "${income.name}"?'),
+        content: Text(
+            'Deseja realmente excluir a receita "${income.name}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
