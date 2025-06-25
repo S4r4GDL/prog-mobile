@@ -17,6 +17,7 @@ class _SignupPageState extends State<SignupPage> {
   bool _obscurePassword = true;
 
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
@@ -33,7 +34,7 @@ class _SignupPageState extends State<SignupPage> {
     if (_signupFormKey.currentState!.validate()) {
       try {
         final userCreateDTO = UserCreateDTO(
-          login: _emailController.text.trim(),
+          login: _usernameController.text.trim(),
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
@@ -116,6 +117,39 @@ class _SignupPageState extends State<SignupPage> {
                         decoration: InputDecoration(
                           label: const Text('Email'),
                           hintText: 'Insira o seu email',
+                          hintStyle: const TextStyle(color: Colors.black26),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.green,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          floatingLabelStyle: const TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _usernameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Insira um nome';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          label: const Text('Login'),
+                          hintText: 'Insira o seu nome de usuário',
                           hintStyle: const TextStyle(color: Colors.black26),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.black26),
