@@ -101,22 +101,16 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       const SizedBox(height: 32),
                       TextFormField(
-                        controller: _emailController,
+                        controller: _usernameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Entre com o email';
-                          }
-                          String pattern =
-                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-                          RegExp regex = RegExp(pattern);
-                          if (!regex.hasMatch(value)) {
-                            return 'Insira um email válido';
+                            return 'Insira seu nome';
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          label: const Text('Email'),
-                          hintText: 'Insira o seu email',
+                          label: const Text('Nome'),
+                          hintText: 'Insira o seu nome de usuário',
                           hintStyle: const TextStyle(color: Colors.black26),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.black26),
@@ -140,16 +134,22 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
-                        controller: _usernameController,
+                        controller: _emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Insira um nome';
+                            return 'Entre com o email';
+                          }
+                          String pattern =
+                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                          RegExp regex = RegExp(pattern);
+                          if (!regex.hasMatch(value)) {
+                            return 'Insira um email válido';
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          label: const Text('Login'),
-                          hintText: 'Insira o seu nome de usuário',
+                          label: const Text('Email'),
+                          hintText: 'Insira o seu email',
                           hintStyle: const TextStyle(color: Colors.black26),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.black26),
@@ -260,7 +260,7 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
