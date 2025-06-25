@@ -7,7 +7,6 @@ import '../../theme/theme.dart';
 import '../../widgets/login_scaffold.dart';
 import 'forget_password_page.dart';
 import 'signup_page.dart';
-
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
 
@@ -47,13 +46,16 @@ class _SigninPageState extends State<SigninPage> {
       if (credencial != null) {
         userSession.userId = credencial.id;
         userSession.token = credencial.accessToken;
+        if (_rememberMe) {
+          await userSession.save();
+        }
         configureApiClientWithToken(userSession.token!);
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login realizado com sucesso!')),
         );
 
-        Routefly.navigate(routePaths.pages.core.home);
+        Routefly.push(routePaths.pages.core.home);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Email ou senha incorretos!')),
@@ -61,12 +63,12 @@ class _SigninPageState extends State<SigninPage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao autenticar: ${e.toString()}')),
-      );
+          SnackBar(content: Text('Erro ao autenticar: ${e.toString()}'))
+    );
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+    setState(() {
+    _isLoading = false;
+    });
     }
   }
 

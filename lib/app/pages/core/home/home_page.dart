@@ -8,6 +8,7 @@ import '../management/incomes/incomes_page.dart';
 import '../management/goals/goals_page.dart';
 import '../management/expenses/expenses_page.dart';
 import 'logout_dialog.dart';
+import 'package:prog_mobile_app_educadin/app/pages/core/notifications/notifications_page.dart'; // Import your new notifications page
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,11 +34,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _handleUserPressed() {
-    print("Usuário");
+    print("User profile pressed");
+    // You could navigate to a user profile page here
   }
 
   void _handleNotificationPressed() {
-    print("Notificações");
+    print("Notifications icon pressed");
+    _navigateTo(const NotificationsPage()); // Navigate to the NotificationsPage
   }
 
   @override
@@ -46,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       title: 'Home',
       onLogout: _handleLogout,
       onUserPressed: _handleUserPressed,
-      onNottfication: _handleNotificationPressed,
+      onNottfication: _handleNotificationPressed, // This will now navigate to NotificationsPage
       drawer: Drawer(
         width: 200,
         child: ListView(

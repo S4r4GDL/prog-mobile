@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../login/signin_page.dart';
+import '../../login/signup_page.dart';
 import '../../login/user_session.dart';
 
 class LogoutDialog {
@@ -29,15 +30,11 @@ class LogoutDialog {
               TextButton(
                 child: const Text('Sair'),
                 onPressed: () {
-                  Navigator.of(context).pop();
-                  onConfirm: () {
                     userSession.clear();
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const SigninPage()),
-                          (route) => false,
                     );
-                  };
                 },
               ),
             ],

@@ -1,8 +1,6 @@
 import 'package:educadinapi/api.dart';
 import 'package:flutter/material.dart';
 import 'package:prog_mobile_app_educadin/app/pages/login/signin_page.dart';
-import 'package:prog_mobile_app_educadin/main.dart';
-import 'package:routefly/routefly.dart';
 import '../../theme/theme.dart';
 import '../../widgets/login_scaffold.dart';
 

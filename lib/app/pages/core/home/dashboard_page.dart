@@ -13,19 +13,7 @@ class DashboardPage extends StatelessWidget {
             const SizedBox(height: 40),
             const Text(
               'Bem-vindo ao App EducaDin!',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              'Descrição do Projeto EducaDin',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'O EducaDin é uma aplicação de gestão financeira pessoal que foi desenvolvida para '
-                  'atender às necessidades especificas de usuários que enfrentam desafios recorrentes em '
-                  'controlar suas finanças e melhorar a sua educação financeira.',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -39,10 +27,9 @@ class DashboardPage extends StatelessWidget {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 children: [
-                  _buildDashboardCard(Icons.attach_money, 'Ganhos', 'R\$ 12K'),
-                  _buildDashboardCard(Icons.money_off, 'Gastos', 'R\$ 10K'),
-                  _buildDashboardCard(Icons.flag, 'Metas', 'R\$ 12K'),
-                  _buildDashboardCard(Icons.bar_chart, 'Relatórios', '5 novos'),
+                  _buildDashboardCard(Icons.attach_money, 'Ganhos'),
+                  _buildDashboardCard(Icons.money_off, 'Gastos'),
+                  _buildDashboardCard(Icons.flag, 'Metas')
                 ],
               ),
             ),
@@ -53,7 +40,7 @@ class DashboardPage extends StatelessWidget {
   }
 }
 
-Widget _buildDashboardCard(IconData icon, String title, String value) {
+Widget _buildDashboardCard(IconData icon, String title) {
   return Card(
     elevation: 4,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -66,7 +53,6 @@ Widget _buildDashboardCard(IconData icon, String title, String value) {
           const SizedBox(height: 12),
           Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
-          Text(value, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
         ],
       ),
     ),
