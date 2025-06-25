@@ -207,12 +207,13 @@ class _GoalsPageState extends State<GoalsPage> {
               }
             }
             return Padding(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(context).viewInsets.bottom + 20),
+              padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(context).viewInsets.bottom + 80),
               child: Wrap(
-                runSpacing: 16,
+                runSpacing: 24,
                 children: [
                   Text('Filtrar por Período', style: Theme.of(context).textTheme.titleLarge),
                   _buildDateSelector(context, label: 'Data Início', date: _startDate, onTap: () => pickDate(true)),
+                  const SizedBox(height: 16),
                   _buildDateSelector(context, label: 'Data Fim', date: _endDate, onTap: () => pickDate(false)),
                   Row(
                     children: [
@@ -226,14 +227,14 @@ class _GoalsPageState extends State<GoalsPage> {
                           child: const Text('Limpar Datas'),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
                             _applyFilters();
                             Navigator.pop(context);
                           },
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.white),
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.green, foregroundColor: Colors.white),
                           child: const Text('Aplicar'),
                         ),
                       ),
@@ -291,7 +292,6 @@ class _GoalsPageState extends State<GoalsPage> {
                     icon: const Icon(Icons.tune),
                     tooltip: 'Filtros avançados',
                   ),
-                  // BOTÃO "ADICIONAR" FOI REMOVIDO DESTA ROW
                 ],
               ),
             ),
@@ -448,7 +448,7 @@ class _GoalsPageState extends State<GoalsPage> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: lightColorScheme.surface,
-                                foregroundColor: Colors.amber.shade700,
+                                foregroundColor: Colors.green,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),
@@ -584,7 +584,7 @@ class _GoalsPageState extends State<GoalsPage> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber,
+                  backgroundColor: Colors.green,
                   foregroundColor: Colors.white
               ),
               child: Text(isEditing ? 'Salvar' : 'Adicionar'),

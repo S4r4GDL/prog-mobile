@@ -35,21 +35,14 @@ class _HomePageState extends State<HomePage> {
 
   void _handleUserPressed() {
     print("User profile pressed");
-    // You could navigate to a user profile page here
   }
 
-  void _handleNotificationPressed() {
-    print("Notifications icon pressed");
-    _navigateTo(const NotificationsPage()); // Navigate to the NotificationsPage
-  }
 
   @override
   Widget build(BuildContext context) {
     return ManageDefaultScaffold(
       title: 'Home',
       onLogout: _handleLogout,
-      onUserPressed: _handleUserPressed,
-      onNottfication: _handleNotificationPressed, // This will now navigate to NotificationsPage
       drawer: Drawer(
         width: 200,
         child: ListView(
@@ -61,7 +54,7 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: const Icon(Icons.attach_money),
-              title: const Text('Ganhos'),
+              title: const Text('Ganhos' ),
               onTap: () => _navigateTo(const IncomesPage()),
             ),
             ListTile(
