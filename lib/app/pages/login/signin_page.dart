@@ -17,7 +17,7 @@ class SigninPage extends StatefulWidget {
 
 class _SigninPageState extends State<SigninPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final AuthAPIApi _authApi = AuthAPIApi();
 
@@ -38,7 +38,7 @@ class _SigninPageState extends State<SigninPage> {
 
     try {
       final authDTO = AuthDTO(
-        login: _emailController.text.trim(),
+        login: _usernameController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
@@ -98,19 +98,36 @@ class _SigninPageState extends State<SigninPage> {
                       ),
                       const SizedBox(height: 32),
                       TextFormField(
-                        controller: _emailController,
+                        controller: _usernameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Insira o email';
-                          }
-                          final regex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
-                          if (!regex.hasMatch(value)) {
-                            return 'Email inválido';
+                            return 'Insira seu nome';
                           }
                           return null;
                         },
-                        decoration: _inputDecoration('Email'),
-
+                        decoration: InputDecoration(
+                          label: const Text('Nome'),
+                          hintText: 'Insira o seu nome de usuário',
+                          hintStyle: const TextStyle(color: Colors.black26),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black26),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.green,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          floatingLabelStyle: const TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
